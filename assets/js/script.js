@@ -20,6 +20,7 @@ var questions = [{
 }];
 
 // Get different html sections to switch between sections, and other vital elements
+var header = document.querySelector("header");
 var scoreLink = document.getElementById("score-link");
 
 var timerDisplay = document.getElementById("timer-display"); //span element that displays time left
@@ -75,6 +76,9 @@ function changeActive(targetSection) { //make target section the active section.
 // Start screen related functions
 scoreLink.addEventListener("click", function () {
     changeActive(scoreSection);
+    timerDisplay.textContent = "";
+    clearInterval(timerInterval);
+    header.setAttribute("style", "visibility: hidden");
 })
 
 startButton.addEventListener("click", function () {
@@ -100,8 +104,6 @@ startButton.addEventListener("click", function () {
 // Question screen related functions
 
 answerOl.addEventListener("click", function (event) {
-    // console.log(event.target);
-    console.log(event.target.tagName);
     if (event.target.tagName.toLowerCase() != 'li') {
         return;
     }
@@ -143,7 +145,6 @@ function renderQuestion() {//Display question
     questionField.textContent = questions[currentQuestion].question;
     var ansOrder = [0, 1, 2, 3];
     shuffle(ansOrder);
-    console.log(ansOrder);
     for (var i = 0; i < answerField.length; i++) {
         if (ansOrder[i] == 0) {
             answerField[i].textContent = questions[currentQuestion].answer;
@@ -167,6 +168,8 @@ submitButton.addEventListener("click", function (event) {
     event.preventDefault();
     addScore(initialField.value, timeLeft);
     initialField.value = "";
+    timerDisplay.textContent = "";
+    header.setAttribute("style", "visibility: hidden");
     setScores();
     renderScores();
     changeActive(scoreSection);
@@ -176,6 +179,7 @@ submitButton.addEventListener("click", function (event) {
 
 returnButton.addEventListener("click", function () {
     changeActive(startSection);
+    header.setAttribute("style", "visibility: visible");
 });
 
 clearButton.addEventListener("click", function () {
