@@ -10,6 +10,48 @@
 </head>
 
 <body>
+    <header>
+        <a href="">View Highscores</a>
+        <p>Time: <span id="timer-display"></span></p>
+    </header>
+    <main>
+        <!-- Game Start Menu -->
+        <section id="start-menu">
+            <h1>Coding Quiz Challenge</h1>
+            <p>Try to answer the following code related questions within the time limit. Keep in mind that incorrect
+                answers will penalize your score and time by 10 seconds!</p>
+            <button>Start Quiz</button>
+        </section>
+        <!-- Question Box -->
+        <section id="question-box">
+            <h3 id="question"></h3>
+            <ol id="answers">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ol>
+            <p id="feedback"></p>
+        </section>
+        <!-- End Screen -->
+        <section id="end-screen">
+            <h3>All Done!</h3>
+            <p>Your final score is <span id="score-display"></span>.</p>
+            <form action="">
+                <label for="initials">Enter initals: </label>
+                <input type="text" id="initials">
+                <input type="submit">
+            </form>
+        </section>
+        <!-- Score Screen -->
+        <section id="score-screen">
+            <h2>Highscores</h2>
+            <ol id="highscores">
+            </ol>
+            <button>Go Back</button>
+            <button>Clear Highscores</button>
+        </section>
+    </main>
     <script src="./assets/js/script.js"></script>
 </body>
 
