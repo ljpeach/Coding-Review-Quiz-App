@@ -23,7 +23,7 @@ var questions = [{
 var scoreLink = document.getElementById("score-link");
 
 var timerDisplay = document.getElementById("timer-display"); //span element that displays time left
-var countdown = 60; //default time for timer. Will likely change to 15*questions.length.
+var countdown = 2; //default time for timer. Will likely change to 15*questions.length.
 var timeLeft; //time left on timer.
 var timerInterval; //tracks the setIncrement call
 var timerPenalty = 10; //num of seconds penalized for incorrect answer
@@ -52,11 +52,12 @@ var currentQuestion; //tracks current question.
 
 function intit() { //Start up tasks on site launch
     activeFrame = startSection;
-    // questionSection.setAttribute("style", "display: none");
+    questionSection.setAttribute("style", "display: none");
     endSection.setAttribute("style", "display: none");
     scoreSection.setAttribute("style", "display: none");
     changeActive(activeFrame); //display start on page
     getScores();
+    renderScores();
 }
 
 // Functions for switching to given section
@@ -121,6 +122,9 @@ function shuffleQuestions() { //Reset order of questions in question list
 submitButton.addEventListener("click", function (event) {
     event.preventDefault();
     addScore(initialField.value, timeLeft);
+    initialField.value = "";
+    setScores();
+    renderScores();
     changeActive(scoreSection);
 });
 
@@ -136,12 +140,55 @@ clearButton.addEventListener("click", function () {
     renderScores();
 });
 
-function setScores() { } //set scores in local memory
+function setScores() { //set scores in local memory
+    localStorage.setItem("highscores", JSON.stringify(highscores));
+}
 
-function getScores() { } //get scores from local memory
+function getScores() { //get scores from local memory
+    highscores = JSON.parse(localStorage.getItem("highscores"));
+    if (highscores == null) {
+        highscores = [];
+    }
+}
 
-function addScore(initial, score) { } //Add new score to score array, sort.
-function renderScores() { } //render list of scores on high score page. 
+function addScore(initial, score) { //Add new score to score array, sort.
+    highscores.push({ initial: initial, score: score });
+    highscores.sort(function (a, b) {
+        if (a.score == b.score) {
+            return 0;
+        }
+        else if (a.score > b.score) {
+            return 1;
+        }
+        else {
+            return -1;
+        }
+    });
+}
+function renderScores() { //render list of scores on high score page. 
+    var rankings = scoreArray.querySelectorAll("li");
+    if (rankings.length > highscores.length) {//will only occur after clear scores. Wipe all.
+        for (var i = 0; i < rankings.length; i++) {
+            rankings[i].remove();
+        }
+    }
+    else if (rankings.length == highscores.length) {
+        for (var i = 0; i < rankings.length; i++) {
+            rankings[i].textContent = `${highscores[i].initial} - ${highscores[i].score}`;
+        }
+    }
+    else {
+        var i;
+        for (i = 0; i < rankings.length; i++) {
+            rankings[i].textContent = `${highscores[i].initial} - ${highscores[i].score}`;
+        }
+        for (i = i; i < highscores.length; i++) {
+            var newScore = document.createElement("li");
+            newScore.textContent = `${highscores[i].initial} - ${highscores[i].score}`;
+            scoreArray.append(newScore);
+        }
+    }
+}
 
 function shuffle(shuffleArr) {
     for (var i = 0; i < shuffleArr.length; i++) {
