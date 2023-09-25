@@ -23,7 +23,7 @@ var questions = [{
 var scoreLink = document.getElementById("score-link");
 
 var timerDisplay = document.getElementById("timer-display"); //span element that displays time left
-var countdown = 2; //default time for timer. Will likely change to 15*questions.length.
+var countdown = 60; //default time for timer. Will likely change to 15*questions.length.
 var timeLeft; //time left on timer.
 var timerInterval; //tracks the setIncrement call
 var timerPenalty = 10; //num of seconds penalized for incorrect answer
@@ -33,7 +33,8 @@ var startButton = document.getElementById("start-button");
 
 var questionSection = document.getElementById("question-box");
 var questionField = document.getElementById("question");
-var answerField = document.getElementById("answers").querySelectorAll("li");
+var answerOl = document.getElementById("answers");
+var answerField = answerOl.querySelectorAll("li");
 
 var endSection = document.getElementById("end-screen");
 var scoreDisplay = document.getElementById("score-display");
@@ -96,6 +97,32 @@ startButton.addEventListener("click", function () {
 // Question screen related functions
 
 // question list event listener, use event.target to determine whether correct index was chosen.
+answerOl.addEventListener("click", function (event) {
+    // console.log(event.target);
+    console.log(event.target.tagName);
+    if (event.target.tagName.toLowerCase() != 'li') {
+        return;
+    }
+    if (event.target.getAttribute("data-valid") == 'true') {
+        console.log("Correct");
+
+    }
+    else if (event.target.getAttribute("data-valid") == 'false') {
+        console.log("Wrong");
+        timeLeft -= 10;
+        timerDisplay.textContent = timeLeft;
+    }
+    currentQuestion += 1;
+    if (currentQuestion == questions.length) {
+        clearInterval(timerInterval);
+        scoreDisplay.textContent = timeLeft;
+        changeActive(endSection);
+    }
+    else {
+        renderQuestion();
+    }
+});
+
 
 function renderQuestion() {//Display question
     questionField.textContent = questions[currentQuestion].question;
@@ -105,9 +132,11 @@ function renderQuestion() {//Display question
     for (var i = 0; i < answerField.length; i++) {
         if (ansOrder[i] == 0) {
             answerField[i].textContent = questions[currentQuestion].answer;
+            answerField[i].setAttribute("data-valid", "true");
         }
         else {
             answerField[i].textContent = questions[currentQuestion].incorrect[ansOrder[i] - 1];
+            answerField[i].setAttribute("data-valid", "false");
         }
     }
 }
