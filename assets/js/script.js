@@ -35,6 +35,8 @@ var questionSection = document.getElementById("question-box");
 var questionField = document.getElementById("question");
 var answerOl = document.getElementById("answers");
 var answerField = answerOl.querySelectorAll("li");
+var feedbackField = document.getElementById("feedback");
+var feedbackInterval; //tracks interval for feedback disappearing
 
 var endSection = document.getElementById("end-screen");
 var scoreDisplay = document.getElementById("score-display");
@@ -56,6 +58,7 @@ function intit() { //Start up tasks on site launch
     questionSection.setAttribute("style", "display: none");
     endSection.setAttribute("style", "display: none");
     scoreSection.setAttribute("style", "display: none");
+    feedbackField.setAttribute("style", "display: none");
     changeActive(activeFrame); //display start on page
     getScores();
     renderScores();
@@ -96,7 +99,6 @@ startButton.addEventListener("click", function () {
 
 // Question screen related functions
 
-// question list event listener, use event.target to determine whether correct index was chosen.
 answerOl.addEventListener("click", function (event) {
     // console.log(event.target);
     console.log(event.target.tagName);
@@ -104,11 +106,13 @@ answerOl.addEventListener("click", function (event) {
         return;
     }
     if (event.target.getAttribute("data-valid") == 'true') {
-        console.log("Correct");
+        clearFeedback()
+        feedback("Correct");
 
     }
     else if (event.target.getAttribute("data-valid") == 'false') {
-        console.log("Wrong");
+        clearFeedback()
+        feedback("Wrong");
         timeLeft -= 10;
         timerDisplay.textContent = timeLeft;
     }
@@ -122,6 +126,17 @@ answerOl.addEventListener("click", function (event) {
         renderQuestion();
     }
 });
+
+function feedback(result) {
+    feedbackField.setAttribute("style", "display: block");
+    feedbackField.textContent = result;
+    feedbackInterval = setInterval(clearFeedback, 2500);
+}
+
+function clearFeedback() {
+    clearInterval(feedbackInterval);
+    feedbackField.setAttribute("style", "display: none");
+}
 
 
 function renderQuestion() {//Display question
