@@ -27,7 +27,7 @@ var timerDisplay = document.getElementById("timer-display"); //span element that
 var countdown = 60; //default time for timer. Will likely change to 15*questions.length.
 var timeLeft; //time left on timer.
 var timerInterval; //tracks the setIncrement call
-var timerPenalty = 10; //num of seconds penalized for incorrect answer
+var timerPenalty = 15; //num of seconds penalized for incorrect answer
 
 var startSection = document.getElementById("start-menu");
 var startButton = document.getElementById("start-button");
@@ -76,7 +76,7 @@ function changeActive(targetSection) { //make target section the active section.
 // Start screen related functions
 scoreLink.addEventListener("click", function () {
     changeActive(scoreSection);
-    timerDisplay.textContent = "";
+    timerDisplay.textContent = 0;
     clearInterval(timerInterval);
     header.setAttribute("style", "visibility: hidden");
 })
@@ -115,7 +115,7 @@ answerOl.addEventListener("click", function (event) {
     else if (event.target.getAttribute("data-valid") == 'false') {
         clearFeedback()
         feedback("Wrong");
-        timeLeft -= 10;
+        timeLeft -= timerPenalty;
         timerDisplay.textContent = timeLeft;
     }
     currentQuestion += 1;
@@ -132,7 +132,7 @@ answerOl.addEventListener("click", function (event) {
 function feedback(result) {
     feedbackField.setAttribute("style", "display: block");
     feedbackField.textContent = result;
-    feedbackInterval = setInterval(clearFeedback, 2500);
+    feedbackInterval = setInterval(clearFeedback, 50);
 }
 
 function clearFeedback() {
@@ -168,7 +168,7 @@ submitButton.addEventListener("click", function (event) {
     event.preventDefault();
     addScore(initialField.value, timeLeft);
     initialField.value = "";
-    timerDisplay.textContent = "";
+    timerDisplay.textContent = 0;
     header.setAttribute("style", "visibility: hidden");
     setScores();
     renderScores();
@@ -200,6 +200,9 @@ function getScores() { //get scores from local memory
 }
 
 function addScore(initial, score) { //Add new score to score array, sort.
+    if (initial == "") {
+        initial = "N/A";
+    }
     highscores.push({ initial: initial, score: score });
     highscores.sort(function (a, b) {
         if (a.score == b.score) {
