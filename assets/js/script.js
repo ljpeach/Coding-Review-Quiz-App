@@ -1,22 +1,22 @@
 var questions = [{
-    question: "Question 1",
-    answer: "answer",
-    incorrect: ["wrong1", "wrong2", "wrong3"]
+    question: "Which of the following is not a datatype?",
+    answer: "Word",
+    incorrect: ["Number", "String", "Array"]
 },
 {
-    question: "Question 2",
-    answer: "answer",
-    incorrect: ["wrong1", "wrong2", "wrong3"]
+    question: "Which of the following is not a primitive datatype?",
+    answer: "Array",
+    incorrect: ["String", "Number", "Boolean"]
 },
 {
-    question: "Question 3",
-    answer: "answer",
-    incorrect: ["wrong1", "wrong2", "wrong3"]
+    question: "You type console.log(this) in a blank JS file, and call it from your index.html file. What is logged?",
+    answer: "Window",
+    incorrect: ["document", "console", "index.html"]
 },
 {
-    question: "Question 4",
-    answer: "answer",
-    incorrect: ["wrong1", "wrong2", "wrong3"]
+    question: "Which of the following is the correct element to use to allow your JavaScript file to run when placed within your HTML file?",
+    answer: "<script src=\"path/to/file.js\"></script>",
+    incorrect: ["<script href=\"path/to/file.js\"></script>", "<link src=\"path/to/file.js\"><link/>", "<script src=\"path/to/file.js\"><script/>"]
 }];
 
 // Get different html sections to switch between sections, and other vital elements
@@ -132,7 +132,7 @@ answerOl.addEventListener("click", function (event) {
 function feedback(result) {
     feedbackField.setAttribute("style", "display: block");
     feedbackField.textContent = result;
-    feedbackInterval = setInterval(clearFeedback, 50);
+    feedbackInterval = setInterval(clearFeedback, 750);
 }
 
 function clearFeedback() {
